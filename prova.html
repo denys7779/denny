@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acquista iPhone Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Reset some default styles */
+        body, h1, h2, p, ul, li {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+        }
+
+        #cart-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background-color: #444;
+            color: #fff;
+            padding: 0.5rem 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        /* Main Content Styles */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            overflow: hidden;
+            flex: 1; /* Take up remaining vertical space */
+        }
+
+        .product {
+            width: calc(33.33% - 2rem); /* Adjust width for spacing */
+            float: left;
+            margin: 1rem;
+            padding: 1rem;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .product h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .product p {
+            margin-bottom: 1rem;
+        }
+
+        .product button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .product button:hover {
+            background-color: #4cae4c;
+        }
+
+        /* Cart Styles */
+        #cart {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 100%;
+            background-color: #fff;
+            border-left: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: -2px 0px 5px rgba(0,0,0,0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            overflow-y: auto;
+        }
+
+        #cart.open {
+            transform: translateX(0);
+        }
+
+        #cart h2 {
+            margin-bottom: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item img {
+            width: 70px;
+            height: 70px;
+            margin-right: 0.5rem;
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .remove-item {
+            color: #dc3545;
+            cursor: pointer;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        /* Contacts Styles */
+        #contacts {
+            background: #fff;
+            border-top: 2px solid #4f8cff;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        #contacts h2 {
+            color: #4f8cff;
+            margin-bottom: 1rem;
+        }
+
+        #contacts p {
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+
+        #contacts a {
+            color: #4f8cff;
+            text-decoration: underline;
+        }
+
+        /* Auth Modal Styles */
+        #auth-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        #auth-modal.active {
+            display: flex;
+        }
+        .auth-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(79,140,255,0.18);
+            padding: 2rem 2.5rem;
+            min-width: 320px;
+            max-width: 90vw;
+            text-align: center;
+            position: relative;
+        }
+        .auth-box h2 {
+            color: #4f8cff;
+            margin-bottom: 1.2rem;
+        }
+        .auth-box input {
+            width: 90%;
+            padding: 0.7rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .auth-box button {
+            background: linear-gradient(90deg, #4f8cff 0%, #6ee7b7 100%);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .auth-box .switch-auth {
+            background: none;
+            color: #4f8cff;
+            border: none;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            text-decoration: underline;
+        }
+        .auth-box .close-auth {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.3rem;
+            color: #aaa;
+            cursor: pointer;
+        }
+        .auth-error {
+            color: #dc3545;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Profile Styles */
+        #profile-area {
+            display: none;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(79,140,255,0.08);
+            padding: 2rem 2.5rem;
+            max-width: 400px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        #profile-area h2 {
+            color: #4f8cff;
+            margin-bottom: 1rem;
+        }
+        #profile-area p {
+            margin-bottom: 1rem;
+        }
+        #logout-btn {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #profile-link {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: #fff;
+            background: #4f8cff;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.2s;
+            z-index: 100;
+        }
+        #profile-link:hover {
+            background: #6ee7b7;
+            color: #222;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            .product {
+                width: calc(50% - 2rem);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" id="profile-link" style="display:none;">Профиль</a>
+        <h1>Acquista il Tuo Nuovo iPhone</h1>
+        <i id="cart-icon" class="fas fa-shopping-cart"></i>
+        <span id="cart-count">0</span>
+        <button id="login-btn" style="position:absolute;top:1rem;right:4.5rem;background:#4f8cff;color:#fff;border:none;border-radius:20px;padding:0.4rem 1rem;font-size:1rem;font-weight:500;cursor:pointer;">Войти</button>
+    </header>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Prodotti</a>
+        <a href="#">Offerte</a>
+        <a href="#contacts" id="nav-contatti">Contatti</a>
+    </nav>
+
+    <!-- Профиль -->
+    <div id="profile-area" style="display:none;">
+        <h2>Профиль пользователя</h2>
+        <div style="margin-bottom:1.2rem;position:relative;">
+            <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=4f8cff&color=fff&rounded=true&size=96" alt="Avatar" style="border-radius:50%;box-shadow:0 2px 8px #4f8cff33;width:96px;height:96px;object-fit:cover;">
+            <label for="avatar-upload" style="position:absolute;bottom:0;right:0;background:#4f8cff;color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;">
+                <i class="fa fa-camera"></i>
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none;">
+            </label>
+        </div>
+        <p id="profile-email" style="font-size:1.1rem;font-weight:500;"></p>
+        <div id="profile-extra" style="margin:1rem 0 1.5rem 0;">
+            <p>Дата регистрации: <span id="profile-date"></span></p>
+            <p>Последний вход: <span id="profile-last"></span></p>
+        </div>
+        <button id="to-products-btn" style="background:#4f8cff;color:#fff;border:none;border-radius:20px;padding:0.6rem 1.5rem;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:1rem;">Перейти к товарам</button>
+        <br>
+        <button id="logout-btn">Выйти</button>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container" id="main-content">
+        <div class="product" data-id="1" data-name="iPhone 12" data-price="899" data-image="iphone12.jpg">
+            <img src="iphone12.jpg" alt="iPhone 12">
+            <h2>iPhone 12</h2>
+            <p>Il potente iPhone 12 con display Super Retina XDR.</p>
+            <p>Prezzo: 899€</p>
+            <button class="add-to-cart">Aggiungi al Carrello</button>
+        </div>
+        <div class="product" data-id="2" data-name="iPhone 13" data-price="999" data-image="iphone13.jpg">
+            <img src="iphone13.jpg" alt="iPhone 13">
+            <h2>iPhone 13</h2>
+            <p>L'iPhone 13 con il chip A15 Bionic per prestazioni incredibili.</p>
+            <p>Prezzo: 999€</p>
+            <button class="add-to-cart">Aggiungi al Carrello</button>
+        </div>
+        <div class="product" data-id="3" data-name="iPhone 14" data-price="1099" data-image="iphone14.jpg">
+            <img src="iphone14.jpg" alt="iPhone 14">
+            <h2>iPhone 14</h2>
+            <p>Scopri l'iPhone 14 con fotocamera avanzata e batteria migliorata.</p>
+            <p>Prezzo: 1099€</p>
+            <button class="add-to-cart">Aggiungi al Carrello</button>
+        </div>
+        <div class="product" data-id="4" data-name="iPhone 15" data-price="1199" data-image="iphone15.jpg">
+            <img src="iphone15.jpg" alt="iPhone 15">
+            <h2>iPhone 15</h2>
+            <p>Il nuovissimo iPhone 15 con funzionalità all'avanguardia.</p>
+            <p>Prezzo: 1199€</p>
+            <button class="add-to-cart">Aggiungi al Carrello</button>
+        </div>
+        <div class="product" data-id="5" data-name="iPhone SE" data-price="499" data-image="iphonese.jpg">
+            <img src="iphonese.jpg" alt="iPhone SE">
+            <h2>iPhone SE</h2>
+            <p>iPhone SE potente in piccolo formato.</p>
+            <p>Prezzo: 499€</p>
+            <button class="add-to-cart">Aggiungi al Carrello</button>
+        </div>
+        <div class="product" data-id="6" data-name="iPhone 11" data-price="699" data-image="iphone11.jpg">
+            <img src="iphone11.jpg" alt="iPhone 11">
+            <h2>iPhone 11</h2>
+            <p>iPhone 11 una generazione fa.</p>
+            <p>Prezzo: 699€</p>
+            <button class="add-to-cart">Aggiungi al Carrello</button>
+        </div>
+    </div>
+
+    <div id="cart">
+        <i class="fas fa-times close-cart"></i>
+        <h2>Carrello</h2>
+        <div id="cart-items"></div>
+        <p>Totale: <span id="cart-total">0€</span></p>
+        <!-- Поля для оплаты банковской картой -->
+        <form id="payment-form" style="margin-top:1.5rem; background:#f8f9fa; padding:1rem; border-radius:10px;">
+            <h3 style="margin-bottom:0.7rem; color:#4f8cff;">Оплата банковской картой</h3>
+            <input type="text" id="card-name" placeholder="Имя на карте" required style="width:95%;padding:0.5rem;margin-bottom:0.5rem;border-radius:6px;border:1px solid #ccc;">
+            <input type="text" id="card-number" placeholder="Номер карты" maxlength="19" required style="width:95%;padding:0.5rem;margin-bottom:0.5rem;border-radius:6px;border:1px solid #ccc;">
+            <div style="display:flex;gap:0.5rem;">
+                <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5" required style="flex:1;padding:0.5rem;margin-bottom:0.5rem;border-radius:6px;border:1px solid #ccc;">
+                <input type="text" id="card-cvc" placeholder="CVC" maxlength="4" required style="flex:1;padding:0.5rem;margin-bottom:0.5rem;border-radius:6px;border:1px solid #ccc;">
+            </div>
+            <button type="submit" style="background:#4f8cff;color:#fff;border:none;border-radius:20px;padding:0.7rem 1.5rem;font-size:1rem;font-weight:600;cursor:pointer;width:100%;margin-top:0.5rem;">Оплатить</button>
+            <div id="payment-message" style="color:#28a745;margin-top:0.7rem;font-size:1rem;"></div>
+            <!-- Реальная оплата: Stripe Checkout -->
+            <div style="margin-top:1rem;">
+                <button id="stripe-pay-btn" type="button" style="background:#635bff;color:#fff;border:none;border-radius:20px;padding:0.7rem 1.5rem;font-size:1rem;font-weight:600;cursor:pointer;width:100%;">
+                    Оплатить через Stripe
+                </button>
+                <div style="font-size:0.95rem;color:#888;margin-top:0.3rem;">(Тестовый режим Stripe)</div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Контакты -->
+    <div id="contacts">
+        <h2>Contatti</h2>
+        <p>Email: <a href="mailto:info@iphonestore.it">info@iphonestore.it</a></p>
+        <p>Telefono: <a href="tel:+390123456789">+39 012 345 6789</a></p>
+        <p>Indirizzo: Via Apple, 1, 20100 Milano, Italia</p>
+        <p>Orari: Lun-Ven 9:00-18:00</p>
+    </div>
+
+    <!-- Модальное окно для входа/регистрации с улучшенными полями -->
+    <div id="auth-modal">
+        <div class="auth-box" id="auth-box-login">
+            <span class="close-auth" id="close-auth">&times;</span>
+            <h2>Вход</h2>
+            <div class="auth-error" id="login-error"></div>
+            <input type="email" id="login-email" placeholder="Email" autocomplete="username" style="margin-bottom:0.3rem;">
+            <div style="position:relative;">
+                <input type="password" id="login-password" placeholder="Пароль" autocomplete="current-password" style="width:90%;">
+                <span id="login-show-pass" style="position:absolute;right:10px;top:10px;cursor:pointer;color:#4f8cff;"><i class="fa fa-eye"></i></span>
+            </div>
+            <div style="text-align:left;margin:0.5rem 0 0.5rem 0;">
+                <label style="font-size:0.95rem;">
+                    <input type="checkbox" id="login-remember" style="vertical-align:middle;margin-right:5px;"> Запомнить меня
+                </label>
+            </div>
+            <button id="do-login">Войти</button>
+            <button class="switch-auth" id="to-register">Нет аккаунта? Зарегистрироваться</button>
+        </div>
+        <div class="auth-box" id="auth-box-register" style="display:none;">
+            <span class="close-auth" id="close-auth2">&times;</span>
+            <h2>Регистрация</h2>
+            <div class="auth-error" id="register-error"></div>
+            <input type="email" id="register-email" placeholder="Email" autocomplete="username" style="margin-bottom:0.3rem;">
+            <div style="position:relative;">
+                <input type="password" id="register-password" placeholder="Пароль" autocomplete="new-password" style="width:90%;">
+                <span id="register-show-pass" style="position:absolute;right:10px;top:10px;cursor:pointer;color:#4f8cff;"><i class="fa fa-eye"></i></span>
+            </div>
+            <button id="do-register">Зарегистрироваться</button>
+            <button class="switch-auth" id="to-login">Уже есть аккаунт? Войти</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Negozio Online iPhone</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Мини база данных пользователей (localStorage) ---
+            function getUsers() {
+                // Получить массив пользователей из localStorage
+                return JSON.parse(localStorage.getItem('users') || '[]');
+            }
+            function setUsers(users) {
+                // Сохранить массив пользователей в localStorage
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            function findUser(email) {
+                // Найти пользователя по email
+                let users = getUsers();
+                return users.find(u => u.email === email);
+            }
+            function setCurrentUser(email) {
+                localStorage.setItem('currentUser', email);
+            }
+            function getCurrentUser() {
+                return localStorage.getItem('currentUser');
+            }
+            function logoutUser() {
+                localStorage.removeItem('currentUser');
+            }
+
+            // --- Используйте эти функции для регистрации, входа и профиля ---
+            // Пример использования:
+            // addUser('test@mail.com', '12345');
+            // let user = validateUser('test@mail.com', '12345');
+            // setCurrentUser('test@mail.com');
+            // let current = getCurrentUser();
+            // logoutUser();
+
+            // --- Аутентификация ---
+            const loginBtn = document.getElementById('login-btn');
+            const authModal = document.getElementById('auth-modal');
+            const authBoxLogin = document.getElementById('auth-box-login');
+            const authBoxRegister = document.getElementById('auth-box-register');
+            const closeAuth = document.getElementById('close-auth');
+            const closeAuth2 = document.getElementById('close-auth2');
+            const toRegister = document.getElementById('to-register');
+            const toLogin = document.getElementById('to-login');
+            const doLogin = document.getElementById('do-login');
+            const doRegister = document.getElementById('do-register');
+            const loginError = document.getElementById('login-error');
+            const registerError = document.getElementById('register-error');
+            const profileArea = document.getElementById('profile-area');
+            const profileEmail = document.getElementById('profile-email');
+            const logoutBtn = document.getElementById('logout-btn');
+            const profileLink = document.getElementById('profile-link');
+            const mainContent = document.getElementById('main-content');
+
+            // --- Просмотр пароля ---
+            function togglePassword(inputId, iconId) {
+                const input = document.getElementById(inputId);
+                const icon = document.getElementById(iconId).querySelector('i');
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = "password";
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            }
+            document.getElementById('login-show-pass').onclick = function() {
+                togglePassword('login-password', 'login-show-pass');
+            };
+            document.getElementById('register-show-pass').onclick = function() {
+                togglePassword('register-password', 'register-show-pass');
+            };
+
+            // --- Запоминание логина и пароля ---
+            const loginEmail = document.getElementById('login-email');
+            const loginPassword = document.getElementById('login-password');
+            const loginRemember = document.getElementById('login-remember');
+            if (localStorage.getItem('rememberedEmail')) {
+                loginEmail.value = localStorage.getItem('rememberedEmail');
+                loginRemember.checked = true;
+            }
+            if (localStorage.getItem('rememberedPassword')) {
+                loginPassword.value = localStorage.getItem('rememberedPassword');
+            }
+
+            // Открыть модалку входа
+            loginBtn.onclick = function() {
+                authModal.classList.add('active');
+                authBoxLogin.style.display = '';
+                authBoxRegister.style.display = 'none';
+                loginError.textContent = '';
+                registerError.textContent = '';
+            };
+            // Закрыть модалку
+            closeAuth.onclick = closeAuth2.onclick = function() {
+                authModal.classList.remove('active');
+            };
+            // Переключение на регистрацию
+            toRegister.onclick = function() {
+                authBoxLogin.style.display = 'none';
+                authBoxRegister.style.display = '';
+                loginError.textContent = '';
+                registerError.textContent = '';
+            };
+            // Переключение на вход
+            toLogin.onclick = function() {
+                authBoxLogin.style.display = '';
+                authBoxRegister.style.display = 'none';
+                loginError.textContent = '';
+                registerError.textContent = '';
+            };
+
+            // Регистрация
+            doRegister.onclick = function() {
+                const email = document.getElementById('register-email').value.trim();
+                const password = document.getElementById('register-password').value;
+                if (!email || !password) {
+                    registerError.textContent = "Заполните все поля!";
+                    return;
+                }
+                let users = getUsers();
+                if (users.find(u => u.email === email)) {
+                    registerError.textContent = "Пользователь уже существует!";
+                    return;
+                }
+                users.push({email, password, registered: new Date().toLocaleString(), lastLogin: new Date().toLocaleString()});
+                setUsers(users);
+                setCurrentUser(email);
+                authModal.classList.remove('active');
+                updateAuthUI();
+            };
+
+            // Вход
+            doLogin.onclick = function() {
+                const email = loginEmail.value.trim();
+                const password = loginPassword.value;
+                let users = getUsers();
+                let user = users.find(u => u.email === email && u.password === password);
+                if (!user) {
+                    loginError.textContent = "Неверный email или пароль!";
+                    return;
+                }
+                setCurrentUser(email);
+
+                // Сохраняем email/пароль если стоит галочка
+                if (loginRemember.checked) {
+                    localStorage.setItem('rememberedEmail', email);
+                    localStorage.setItem('rememberedPassword', password);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                    localStorage.removeItem('rememberedPassword');
+                }
+
+                // Сохраняем дату последнего входа
+                user.lastLogin = new Date().toLocaleString();
+                users = users.map(u => u.email === email ? user : u);
+                setUsers(users);
+
+                authModal.classList.remove('active');
+                updateAuthUI();
+            };
+
+            // Профиль
+            profileLink.onclick = function(e) {
+                e.preventDefault();
+                showProfile(getCurrentUser());
+            };
+            logoutBtn.onclick = function() {
+                logoutUser();
+                hideProfile();
+                updateAuthUI();
+            };
+
+            // Кнопка "Перейти к товарам" из профиля
+            document.getElementById('to-products-btn').onclick = function() {
+                document.getElementById('profile-area').style.display = "none";
+                document.getElementById('main-content').style.display = "";
+                document.getElementById('profile-link').style.display = "";
+                document.getElementById('login-btn').style.display = "none";
+            };
+
+            // Смена аватара в профиле
+            const avatarUpload = document.getElementById('avatar-upload');
+            const profileAvatar = document.getElementById('profile-avatar');
+            function saveAvatar(email, dataUrl) {
+                let users = JSON.parse(localStorage.getItem('users') || '[]');
+                users = users.map(u => u.email === email ? {...u, avatar: dataUrl} : u);
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            avatarUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    profileAvatar.src = evt.target.result;
+                    const email = getCurrentUser();
+                    if (email) saveAvatar(email, evt.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Модификация showProfile для отображения кастомного аватара
+            function showProfile(email) {
+                const user = findUser(email);
+                if (user && user.avatar) {
+                    profileAvatar.src = user.avatar;
+                } else {
+                    profileAvatar.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(email) + "&background=4f8cff&color=fff&rounded=true&size=96";
+                }
+                document.getElementById('profile-email').textContent = "Email: " + email;
+                document.getElementById('profile-date').textContent = user && user.registered ? user.registered : "Неизвестно";
+                document.getElementById('profile-last').textContent = user && user.lastLogin ? user.lastLogin : "Сейчас";
+                document.getElementById('profile-area').style.display = "block";
+                document.getElementById('main-content').style.display = "none";
+                document.getElementById('profile-link').style.display = "none";
+                document.getElementById('login-btn').style.display = "none";
+            }
+            function hideProfile() {
+                profileArea.style.display = "none";
+                mainContent.style.display = "";
+                profileLink.style.display = "";
+                loginBtn.style.display = "";
+            }
+
+            // Проверка авторизации при загрузке
+            function updateAuthUI() {
+                const user = getCurrentUser();
+                if (user) {
+                    profileLink.style.display = "";
+                    loginBtn.style.display = "none";
+                    profileLink.textContent = "Профиль";
+                    document.getElementById('profile-area').style.display = "none";
+                    document.getElementById('main-content').style.display = "";
+                } else {
+                    profileLink.style.display = "none";
+                    loginBtn.style.display = "";
+                    document.getElementById('profile-area').style.display = "none";
+                    document.getElementById('main-content').style.display = "";
+                }
+            }
+            updateAuthUI();
+
+            // --- Корзина и товары ---
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            const cartIcon = document.getElementById('cart-icon');
+            const cart = document.getElementById('cart');
+            const closeCartButton = document.querySelector('.close-cart');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            const cartCountElement = document.getElementById('cart-count');
+
+            let cartItems = [];
+            let cartTotal = 0;
+            let itemCount = 0;
+
+            cartIcon.addEventListener('click', function() {
+                cart.classList.add('open');
+            });
+
+            closeCartButton.addEventListener('click', function() {
+                cart.classList.remove('open');
+            });
+
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = this.closest('.product');
+                    const productId = product.dataset.id;
+                    const productName = product.dataset.name;
+                    const productPrice = parseFloat(product.dataset.price);
+                    const productImage = product.dataset.image;
+
+                    const existingCartItem = cartItems.find(item => item.id === productId);
+
+                    if (existingCartItem) {
+                        existingCartItem.quantity++;
+                    } else {
+                        cartItems.push({
+                            id: productId,
+                            name: productName,
+                            price: productPrice,
+                            image: productImage,
+                            quantity: 1
+                        });
+                    }
+
+                    updateCart();
+                });
+            });
+
+            function updateCart() {
+                cartItemsContainer.innerHTML = '';
+                cartTotal = 0;
+                itemCount = 0;
+
+                cartItems.forEach((item) => {
+                    cartTotal += item.price * item.quantity;
+                    itemCount += item.quantity;
+
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.classList.add('cart-item');
+
+                    cartItemElement.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div>
+                            <span>${item.name}</span>
+                            <span>Цена: ${item.price}€</span>
+                            <span>Кол-во: ${item.quantity}</span>
+                        </div>
+                        <div>
+                            <button class="decrease-item" data-id="${item.id}" style="margin-right:5px;">-</button>
+                            <button class="increase-item" data-id="${item.id}" style="margin-right:5px;">+</button>
+                            <span class="remove-item" data-id="${item.id}" style="color:#dc3545;cursor:pointer;"><i class="fas fa-trash"></i></span>
+                        </div>
+                    `;
+
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
+
+                cartTotalElement.textContent = cartTotal.toFixed(2) + '€';
+                cartCountElement.textContent = itemCount;
+
+                document.querySelectorAll('.decrease-item').forEach(btn => {
+                    btn.onclick = function() {
+                        const id = this.dataset.id;
+                        const item = cartItems.find(i => i.id === id);
+                        if (item && item.quantity > 1) {
+                            item.quantity--;
+                        } else if (item && item.quantity === 1) {
+                            cartItems = cartItems.filter(i => i.id !== id);
+                        }
+                        updateCart();
+                    };
+                });
+                document.querySelectorAll('.increase-item').forEach(btn => {
+                    btn.onclick = function() {
+                        const id = this.dataset.id;
+                        const item = cartItems.find(i => i.id === id);
+                        if (item) {
+                            item.quantity++;
+                        }
+                        updateCart();
+                    };
+                });
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.onclick = function() {
+                        const id = this.dataset.id;
+                        cartItems = cartItems.filter(i => i.id !== id);
+                        updateCart();
+                    };
+                });
+            }
+
+            // Прокрутка к контактам при клике на "Contatti"
+            document.getElementById('nav-contatti').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('contacts').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // Простая имитация оплаты
+            document.getElementById('payment-form').onsubmit = function(e) {
+                e.preventDefault();
+                // Валидация (очень базовая)
+                const name = document.getElementById('card-name').value.trim();
+                const number = document.getElementById('card-number').value.replace(/\s/g, '');
+                const expiry = document.getElementById('card-expiry').value.trim();
+                const cvc = document.getElementById('card-cvc').value.trim();
+                const message = document.getElementById('payment-message');
+
+                if (!name || !/^\d{16}$/.test(number) || !/^\d{2}\/\d{2}$/.test(expiry) || !/^\d{3,4}$/.test(cvc)) {
+                    message.style.color = "#dc3545";
+                    message.textContent = "Проверьте правильность заполнения всех полей!";
+                    return;
+                }
+                message.style.color = "#28a745";
+                message.textContent = "Оплата прошла успешно! Спасибо за покупку.";
+                // Очистить корзину после оплаты
+                setTimeout(() => {
+                    message.textContent = "";
+                    cartItems.length = 0;
+                    updateCart();
+                }, 2000);
+            };
+
+            // Автоматическое форматирование номера карты
+            document.getElementById('card-number').addEventListener('input', function(e) {
+                let value = this.value.replace(/\D/g, '').slice(0,16);
+                this.value = value.replace(/(.{4})/g, '$1 ').trim();
+            });
+
+            // Автоматическое форматирование срока действия
+            document.getElementById('card-expiry').addEventListener('input', function(e) {
+                let value = this.value.replace(/\D/g, '').slice(0,4);
+                if (value.length > 2) value = value.slice(0,2) + '/' + value.slice(2);
+                this.value = value;
+            });
+
+            // Stripe Checkout (тестовый ключ)
+            const stripe = Stripe('pk_test_51NwQw7Ew2k...your_test_key_here...'); // <-- Вставьте свой публичный ключ Stripe
+
+            document.getElementById('stripe-pay-btn').onclick = function() {
+                // Пример: создаём сессию через ваш сервер (реальный платеж)
+                fetch('https://your-server.example.com/create-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        // Можно передать сумму, валюту, описание и т.д.
+                        amount: Math.round(parseFloat(document.getElementById('cart-total').textContent) * 100), // в центах
+                        currency: 'eur',
+                        description: 'Покупка iPhone'
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.id) {
+                        stripe.redirectToCheckout({ sessionId: data.id });
+                    } else {
+                        document.getElementById('payment-message').style.color = "#dc3545";
+                        document.getElementById('payment-message').textContent = "Ошибка оплаты. Попробуйте позже.";
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('payment-message').style.color = "#dc3545";
+                    document.getElementById('payment-message').textContent = "Ошибка соединения с платежным сервером.";
+                });
+            };
+        });
+    </script>
+    <script src="https://js.stripe.com/v3/"></script>
+</body>
+</html>
